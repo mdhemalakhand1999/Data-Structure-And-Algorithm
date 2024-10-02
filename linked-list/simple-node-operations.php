@@ -94,10 +94,39 @@ class LinkedList {
         }
         return false;
     }
+
+    /**
+     * Insert a node before specific node.
+     * 
+     * Data: its data for node.
+     * Query: its string for search node.
+     */
+    public function insertBefore( string $data = null, string $query = null ) {
+        $newNode = new ListNode( $data );
+        // Do operation if firstNode exists.
+        if( $this->_firstNode !== null ) {
+            $prevNode = null;
+            $currentFirstNode = $this->_firstNode;
+
+            while( $currentFirstNode !== null ) {
+                if( $currentFirstNode->data === $query ) {
+                    // add data before array.
+                    $newNode->next = $currentFirstNode;
+                    $prevNode->next = $newNode;
+                    $this->_totalNodes++;
+                    break;
+                }
+                $prevNode = $currentFirstNode;
+                $currentFirstNode = $currentFirstNode->next;
+            }
+        }
+    }
 }
 
 $linkedlist = new LinkedList();
-$linkedlist->insertIntoFirst('Md hemal akhand');
-$linkedlist->insertIntoFirst('Md kamal akhand');
-$linkedlist->insertIntoFirst('Md Rumel akhand');
-$searchNode = $linkedlist->searchNode('Md hemal akhand');
+$linkedlist->insertIntoFirst('10');
+$linkedlist->insertIntoFirst('20');
+$linkedlist->insertIntoFirst('30');
+$linkedlist->insertBefore('50', '20');
+$linkedlist->displayNodes();
+// $searchNode = $linkedlist->searchNode('Md hemal akhand');
