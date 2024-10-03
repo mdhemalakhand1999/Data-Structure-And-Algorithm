@@ -101,25 +101,111 @@ class LinkedList {
      * Data: its data for node.
      * Query: its string for search node.
      */
-    public function insertBefore( string $data = null, string $query = null ) {
+    public function insertBefore( $data = '', $search = '' ) {
         $newNode = new ListNode( $data );
-        // Do operation if firstNode exists.
-        if( $this->_firstNode !== null ) {
-            $prevNode = null;
-            $currentFirstNode = $this->_firstNode;
 
-            while( $currentFirstNode !== null ) {
-                if( $currentFirstNode->data === $query ) {
-                    // add data before array.
-                    $newNode->next = $currentFirstNode;
-                    $prevNode->next = $newNode;
+        if( $this->_firstNode ) {
+            $currentNode = $this->_firstNode;
+            $previous = null;
+            while( $currentNode !== null ) {
+                if( $currentNode->data === $search ) {
+                    $previous->next = $newNode;
+                    $newNode->next = $currentNode;
                     $this->_totalNodes++;
                     break;
                 }
-                $prevNode = $currentFirstNode;
-                $currentFirstNode = $currentFirstNode->next;
+                $previous = $currentNode;
+                $currentNode = $currentNode->next;
             }
         }
+    }
+
+    /**
+     * Insert after specific node.
+     */
+    public function insertAfter( $data = null, $query = null ) {
+        $newNode = new ListNode( $data );
+
+        if( $this->_firstNode !== null ) {
+            $currentNode = $this->_firstNode;
+            $nextNode = null;
+            while( $currentNode !== null ) {
+                if( $currentNode->data === $query ) {
+                    $currentNode->next = $newNode;
+                    if( $nextNode !== null ) {
+                        $newNode->next = $nextNode;
+                    }
+                    $this->_totalNodes++;
+                    break;
+                }
+                $currentNode = $currentNode->next;
+                $nextNode = $currentNode->next;
+            }
+        }
+    }
+
+    /**
+     * Deleting first node.
+     */
+    public function deleteFirst() {
+        if( $this->_firstNode ) {
+            if( $this->_firstNode->next !== null ) {
+                $this->_firstNode = $this->_firstNode->next;
+            } else {
+                $this->_firstNode = null;
+            }
+            $this->_totalNodes--;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Deleting last node.
+     */
+    public function deleteLastNode() {
+        if( $this->_firstNode !== null ) {
+            $currentNode = $this->_firstNode;
+            if( $this->_firstNode->next === null ) {
+                $this->_firstNode = null;
+            } else {
+                $previousNode = null;
+                while( $currentNode->next !== null ) {
+                    $previousNode = $currentNode;
+                    $currentNode = $currentNode->next;
+                }
+                $previousNode->next = null;
+            }
+            $this->_totalNodes--;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Find and delete node.
+     */
+    public function findAndDelete( $query = null ) {
+        if( $this->_firstNode !== null ) {
+            $currentNode = $this->_firstNode;
+            while( $currentNode !== null ) {
+                if( $currentNode->data === $query ) {
+                    if( $currentNode->next === null ) {
+                        $previous->next = null;
+                    } else {
+                        $previous->next = $currentNode->next;
+                    }
+
+                    break;
+                } else {
+                    $previous = $currentNode;
+                    $currentNode = $currentNode->next;
+                }
+            }
+            $this->_totalNodes--;
+            return true;
+        }
+        return false;
     }
 }
 
@@ -127,6 +213,10 @@ $linkedlist = new LinkedList();
 $linkedlist->insertIntoFirst('10');
 $linkedlist->insertIntoFirst('20');
 $linkedlist->insertIntoFirst('30');
-$linkedlist->insertBefore('50', '20');
+$linkedlist->insertBefore('150', '30');
+// $linkedlist->insertAfter('150', '20');
+// $linkedlist->findAndDelete('50');
+// $linkedlist->deleteFirst();
+// $linkedlist->deleteLastNode();
 $linkedlist->displayNodes();
 // $searchNode = $linkedlist->searchNode('Md hemal akhand');
